@@ -30,19 +30,8 @@ public class CowKillerScript extends Script {
 
         isPlayerReadyToAttack();
         attack();
-
-        ConditionalSleep conditionalSleep = new ConditionalSleep(5000, 500, 250) {
-
-            @Override
-            public boolean condition() throws InterruptedException {
-                return true;
-            }
-        };
-
-        //check for condition on interval of 500 ms until 5 secs have expired.
-        conditionalSleep.sleep();
-
         isInventoryFull();
+
         return 700;
     }
 
@@ -77,10 +66,7 @@ public class CowKillerScript extends Script {
         //find more efficient way to grab refs
         NPC enemy = getNpcs().closest(ENEMY_IDS);
         if(enemy != null && !enemy.isUnderAttack()) {
-            // switchout for conditional lambda function
-            if(enemy.interact("Attack")) {
-                sleep(2000);
-            }
+            Sleep.sleepUntil(() -> enemy.interact("Attack"), 2000);
         }
     }
 
@@ -92,8 +78,7 @@ public class CowKillerScript extends Script {
     }
 
     private void heal() throws InterruptedException {
-        sleep(3142); //sleep 3.14 secs every heal.
-        getInventory().getItem(FOOD_ID).interact("Eat");
+        Sleep.sleepUntil(() -> getInventory().getItem(FOOD_ID).interact("Eat"), 3142);
     }
 
     private boolean isInventoryFull() {
