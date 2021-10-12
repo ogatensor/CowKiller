@@ -26,7 +26,6 @@ public class CowKillerScript extends Script {
 
     @Override
     public int onLoop() throws InterruptedException {
-        log("[CowKillerScript.onLoop]: Player Position: " + myPosition().toString());
 
         isPlayerReadyToAttack();
         attack();
@@ -64,7 +63,7 @@ public class CowKillerScript extends Script {
         }
 
         //find more efficient way to grab refs
-        NPC enemy = getNpcs().closest(ENEMY_IDS);
+        NPC enemy = getNpcs().closest("Cow");
         if(enemy != null && !enemy.isUnderAttack()) {
             Sleep.sleepUntil(() -> enemy.interact("Attack"), 2000);
         }
@@ -82,8 +81,9 @@ public class CowKillerScript extends Script {
     }
 
     private boolean isInventoryFull() {
-        boolean inv = getInventory().isFull();
-        log("[CowKillerScript.isInventoryFull]: The inventory is full");
-        return true;
+        if(getInventory().isFull()) {
+            return true;
+        }
+        return false;
     }
 }
